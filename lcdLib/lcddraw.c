@@ -4,7 +4,6 @@
 #include "lcdutils.h"
 #include "lcddraw.h"
 
-
 /** Draw single pixel at x,row 
  *
  *  \param col Column to draw to

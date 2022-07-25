@@ -30,8 +30,7 @@ char current_position = 0, current_color = 0;
 
 int redrawScreen = 1;
 
-static char 
-switch_update_interrupt_sense()
+static char switch_update_interrupt_sense()
 {
   char p2val = P2IN;
   /* update switch interrupt to detect changes from current buttons */
@@ -40,9 +39,8 @@ switch_update_interrupt_sense()
   return p2val;
 }
 
-void 
-switch_init()			/* setup switch */
-{  
+void switch_init()			/* setup switch */
+{
   P2REN |= SWITCHES;		/* enables resistors for switches */
   P2IE |= SWITCHES;		/* enable interrupts from switches */
   P2OUT |= SWITCHES;		/* pull-ups for switches */
@@ -52,8 +50,7 @@ switch_init()			/* setup switch */
 
 int switches = 0;
 
-void
-switch_interrupt_handler()
+void switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
   switches = ~p2val & SWITCHES;
@@ -112,10 +109,7 @@ void main()
   }
 }
 
-    
-    
-void
-update_shape()
+void update_shape()
 {
   static char last_position = 0, last_color = 0;
   redrawScreen = 0;
@@ -141,12 +135,11 @@ update_shape()
   last_color = color;
 }
 
-
 /* Switch on S2 */
-void
-__interrupt_vec(PORT2_VECTOR) Port_2(){
+void __interrupt_vec(PORT2_VECTOR) Port_2(){
   if (P2IFG & SWITCHES) {	      /* did a button cause this interrupt? */
     P2IFG &= ~SWITCHES;		      /* clear pending sw interrupts */
     switch_interrupt_handler();	/* single handler for all switches */
   }
 }
+
