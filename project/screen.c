@@ -1,5 +1,6 @@
 #include <msp430.h>
 #include <libTimer.h>
+#include "screen.h"
 #include "lcdutils.h"
 #include "lcddraw.h"
 
@@ -9,10 +10,10 @@ unsigned char step = 0;
 // axis zero for col, axis 1 for row
 
 short drawPos[2] = {1,10}, controlPos[2] = {2, 10};
-short colVelocity = 1, colLimits[2] = {1, screenWidth-3}; // -3 because that is the 'ball' size
-short rowVelocity = 1, rowLimits[2] = {1, screenHeight-3} // -3 because that is the 'ball' size
+short colVelocity = 2, colLimits[2] = {1, screenWidth-3};  // -3 because that is the 'ball' size
+short rowVelocity = 2, rowLimits[2] = {1, screenHeight-3}; // -3 because that is the 'ball' size
 
-void draw_ball(int col, int row, unsigned short color)
+void draw_ball(short col, short row, unsigned short color)
 {
   fillRectangle(col-1, row-1, 3, 3, color);
 }
@@ -29,8 +30,6 @@ void screen_update_ball()
     drawPos[axis] = controlPos[axis];
   draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
 }
-
-short redrawScreen = 1;
 
 void screen_update_hourglass()
 {

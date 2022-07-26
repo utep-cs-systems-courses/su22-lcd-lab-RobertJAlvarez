@@ -8,6 +8,8 @@
 
 #define SWITCHES 15 // A;; switches from 0-3
 
+extern short redrawScreen;
+
 void switch_init(); /* setup switch */
 void wdt_c_handler();
 

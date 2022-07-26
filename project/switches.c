@@ -1,6 +1,16 @@
 #include <msp430.h>
 #include <libTimer.h>
+#include "screen.h"
 #include "switches.h"
+
+static char switch_update_interrupt_sense()
+{
+  char p2val = P2IN;
+  /* update switch interrupt to detect changes from current buttons */
+  P2IES |= (p2val & SWITCHES);	/* if switch up, sense down */
+  P2IES &= (p2val | ~SWITCHES);	/* if switch down, sense up */
+  return p2val;
+}
 
 void switch_init()			/* setup switch */
 {
@@ -12,6 +22,8 @@ void switch_init()			/* setup switch */
 }
 
 int switches = 0;
+short redrawScreen = 1;
+
 void wdt_c_handler()
 {
   static int secCount = 0;
@@ -41,25 +53,16 @@ void wdt_c_handler()
   }
 }
 
-void __interrupt_vec(PORT2_VECTOR) Port_2(){
-  if (P2IFG & SWITCHES) {	      /* did a button cause this interrupt? */
-    P2IFG &= ~SWITCHES;		      /* clear pending sw interrupts */
-    switch_interrupt_handler();	/* single handler for all switches */
-  }
-}
-
 void switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();
   switches = ~p2val & SWITCHES;
 }
 
-static char switch_update_interrupt_sense()
-{
-  char p2val = P2IN;
-  /* update switch interrupt to detect changes from current buttons */
-  P2IES |= (p2val & SWITCHES);	/* if switch up, sense down */
-  P2IES &= (p2val | ~SWITCHES);	/* if switch down, sense up */
-  return p2val;
+void __interrupt_vec(PORT2_VECTOR) Port_2(){
+  if (P2IFG & SWITCHES) {	      /* did a button cause this interrupt? */
+    P2IFG &= ~SWITCHES;		      /* clear pending sw interrupts */
+    switch_interrupt_handler();	/* single handler for all switches */
+  }
 }
 

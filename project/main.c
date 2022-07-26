@@ -2,11 +2,13 @@
 #include <libTimer.h>
 #include "switches.h"
 #include "screen.h"
+#include "lcdutils.h"
+#include "lcddraw.h"
 
 // WARNING: LCD DISPLAY USES P1.0.  Do not touch!!! 
 #define LED BIT6  /* note that bit zero req'd for display */
 
-void main()
+void main(void)
 {
   P1DIR |= LED;		/**< Green led on when CPU on */
   P1OUT |= LED;
