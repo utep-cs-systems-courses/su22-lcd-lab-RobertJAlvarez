@@ -24,16 +24,14 @@ void drawPixel(u_char col, u_char row, u_int colorBGR)
  *  \param height height of rectangle
  *  \param colorBGR Color of rectangle in BGR
  */
-void fillRectangle(u_char colMin, u_char rowMin, u_char width, u_char height, 
-		   u_int colorBGR)
+void fillRectangle(u_char colMin, u_char rowMin, u_char width, u_char height, u_int colorBGR)
 {
   u_char colLimit = colMin + width, rowLimit = rowMin + height;
   lcd_setArea(colMin, rowMin, colLimit - 1, rowLimit - 1);
   u_int total = width * height;
   u_int c = 0;
-  while ((c++) < total) {
+  while ((c++) < total)
     lcd_writeColor(colorBGR);
-  }
 }
 
 /** Clear screen (fill with color)
@@ -83,8 +81,7 @@ void drawChar5x7(u_char rcol, u_char rrow, char c,
  *  \param fgColorBGR Foreground color in BGR
  *  \param bgColorBGR Background color in BGR
  */
-void drawString5x7(u_char col, u_char row, char *string,
-		u_int fgColorBGR, u_int bgColorBGR)
+void drawString5x7(u_char col, u_char row, char *string, u_int fgColorBGR, u_int bgColorBGR)
 {
   u_char cols = col;
   while (*string) {
@@ -92,7 +89,6 @@ void drawString5x7(u_char col, u_char row, char *string,
     cols += 6;
   }
 }
-
 
 /** Draw rectangle outline
  *  
@@ -102,8 +98,7 @@ void drawString5x7(u_char col, u_char row, char *string,
  *  \param height Height of rectangle
  *  \param colorBGR Color of rectangle in BGR
  */
-void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
-		     u_int colorBGR)
+void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height, u_int colorBGR)
 {
   /**< top & bot */
   fillRectangle(colMin, rowMin, width, 1, colorBGR);

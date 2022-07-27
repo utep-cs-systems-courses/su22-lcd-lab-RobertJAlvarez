@@ -41,32 +41,32 @@ u_char _orientation = 0;
 #define LCD_DC_HI() LCD_DC_OUT |= LCD_DC_PIN
 
 /** LCD driver IC specific defines */
-#define SWRESET							0x01
-#define	SLEEPOUT						0x11
-#define DISPON							0x29
-#define CASETP							0x2A
-#define PASETP							0x2B
-#define RAMWRP							0x2C
-#define	MADCTL							0x36
-#define	COLMOD							0x3A
-#define GMCTRP1							0xE0
-#define GMCTRN1							0xE1
+#define SWRESET	  0x01
+#define	SLEEPOUT  0x11
+#define DISPON		0x29
+#define CASETP		0x2A
+#define PASETP		0x2B
+#define RAMWRP		0x2C
+#define	MADCTL		0x36
+#define	COLMOD		0x3A
+#define GMCTRP1		0xE0
+#define GMCTRN1		0xE1
 
 /** Set up onboard LCD's SPI and control pins */
 static void setUpSPIforLCD() {
   LCD_DC_OUT |= LCD_DC_PIN;
   LCD_DC_DIR |= LCD_DC_PIN;
-  
+ 
   LCD_CS_OUT |= LCD_CS_PIN;
   LCD_CS_DIR |= LCD_CS_PIN;
-  
+ 
   LCD_SPI_OUT |= LCD_SCLK_PIN;
   LCD_SPI_DIR |= LCD_SCLK_PIN;
   LCD_SPI_OUT |= LCD_MOSI_PIN;
   LCD_SPI_DIR |= LCD_MOSI_PIN;
   LCD_SPI_SEL |= LCD_SCLK_PIN + LCD_MOSI_PIN;
   LCD_SPI_SEL2 |= LCD_SCLK_PIN + LCD_MOSI_PIN;
-  
+ 
   UCB0CTL1 |= UCSWRST;
   UCB0CTL0 = UCCKPH + UCMSB + UCMST + UCSYNC; /**< 3-pin, 8-bit SPI master */
   UCB0CTL1 |= UCSSEL_2; /**< SMCLK */
@@ -79,8 +79,7 @@ static void setUpSPIforLCD() {
 /** Screen dimensions */
 
 /** Write data to LCD */
-static inline void 
-lcd_writeData(u_char data) 
+static inline void lcd_writeData(u_char data) 
 {
   while (UCB0STAT & UCBUSY);	/**< wait for previous transfer to complete */
   LCD_DC_HI();			/**< specify sending data */
@@ -109,26 +108,26 @@ void _writeCommand(u_char command)
 
 /** Long delay (private) */
 void _delay(u_char x10ms) {
-	while (x10ms > 0) {
-		__delay_cycles(160000);
-		x10ms--;
-	}
+  while (x10ms > 0) {
+  	__delay_cycles(160000);
+  	x10ms--;
+  }
 }
 
 /** Set area to draw to */
 void lcd_setArea(u_char colStart, u_char rowStart, u_char colEnd, u_char rowEnd) 
 {
-	_writeCommand(CASETP);
-	lcd_writeData(0);
-	lcd_writeData(colStart);
-	lcd_writeData(0);
-	lcd_writeData(colEnd);
-	_writeCommand(PASETP);
-	lcd_writeData(0);
-	lcd_writeData(rowStart);
-	lcd_writeData(0);
-	lcd_writeData(rowEnd);
-	_writeCommand(RAMWRP);
+  _writeCommand(CASETP);
+  lcd_writeData(0);
+  lcd_writeData(colStart);
+  lcd_writeData(0);
+  lcd_writeData(colEnd);
+  _writeCommand(PASETP);
+  lcd_writeData(0);
+  lcd_writeData(rowStart);
+  lcd_writeData(0);
+  lcd_writeData(rowEnd);
+  _writeCommand(RAMWRP);
 }
 
 /** Initialize onboard LCD */
