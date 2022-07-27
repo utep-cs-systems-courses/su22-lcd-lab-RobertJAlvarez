@@ -60,8 +60,8 @@ void switch_interrupt_handler()
     for (char swNum = 0; swNum < 4; swNum++) { /* respond to lowest button pressed */
       int swFlag = 1 << swNum;
       if (switches & swFlag) {
-	current_position = swNum;
-	break;
+	      current_position = swNum;
+	      break;
       }
     }
   }
@@ -87,7 +87,6 @@ void update_shape();
 
 void main()
 {
-  
   P1DIR |= LED;		/**< Green led on when CPU on */
   P1OUT |= LED;
   configureClocks();
