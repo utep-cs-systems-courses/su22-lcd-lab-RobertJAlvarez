@@ -1,6 +1,5 @@
 #include <msp430.h>
 #include <libTimer.h>
-#include "screen.h"
 #include "switches.h"
 
 static char switch_update_interrupt_sense()
@@ -22,37 +21,6 @@ void switch_init()			/* setup switch */
 }
 
 int switches = 0;
-short redrawScreen = 1;
-
-void wdt_c_handler()
-{
-  static int secCount = 0;
-
-  if (++secCount >= 25) {		/* 10/sec */
-    {				/* move ball */
-      short oldRow = controlPos[1];
-      short newRow = oldRow + rowVelocity;
-      if (newRow <= rowLimits[1] || newRow >= rowLimits[1])
-	      rowVelocity = -rowVelocity;
-      else
-	      controlPos[1] = newRow;
-    }
-
-    {				/* update hourglass */
-      if (switches & SW3) green = (green + 1) % 64;
-      if (switches & SW2) blue = (blue + 2) % 32;
-      if (switches & SW1) red = (red - 3) % 32;
-      if (step <= 30)
-        step++;
-      else
-        step = 0;
-      secCount = 0;
-    }
-    if (switches & SW4) return;
-    redrawScreen = 1;
-  }
-}
-
 void switch_interrupt_handler()
 {
   char p2val = switch_update_interrupt_sense();

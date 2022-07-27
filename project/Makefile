@@ -17,7 +17,7 @@ libs:
 proj.elf: ${COMMON_OBJECTS}
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd 
 
-load: wakedemo.elf
+load: proj.elf
 	msp430loader.sh $^
 
 c_libs:
@@ -29,6 +29,6 @@ clean:
 	rm -f *.o *.elf
 
 switches.o: switches.c switches.h
-screen.o:
+screen.o: switches.h
 main.o: screen.h switches.h
 
