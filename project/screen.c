@@ -5,16 +5,42 @@
 #include "lcdutils.h"
 #include "lcddraw.h"
 
-//char blue = 31, green = 0, red = 31;
-
-short drawPos[2] = {1,10}, controlPos[2] = {2, 10};        // axis zero for col, axis 1 for row
-short colVelocity = 1, colLimits[2] = {1, screenWidth-3};  // -3 because that is the 'ball' size
-short rowVelocity = 5, rowLimits[2] = {1, screenHeight-3}; // -3 because that is the 'ball' size
-
 void drawMiddleDashLine()
 {
   for (unsigned char colMin=0, rowMin=screenHeight/2; colMin < screenWidth; colMin+=4)
     fillRectangle(colMin, rowMin, 1, 1, COLOR_WHITE);
+}
+
+void draw_bar(int col, int row, unsigned short color)
+{
+  fillRectangle(col, row, 11, 1, color);
+}
+
+short barDrawPos[2] = {screenWidth/2, screenWidth/2}; // left bar on 0, right bar on 1
+short barControlPos[2] = {1+screenWidth/2, 1+screenWidth/2};
+short barLim[2] = {5,screenWidth-8};  //bar is of size 5 and bar have shifts of 3
+
+void screen_update_bar()
+{
+  for (char bar = 0; bar < 2; bar++) 
+    if (barDrawPos[bar] != barControlPos[bar]) // position changed?
+      goto redraw;
+  return;			// nothing to do
+ redraw:
+  draw_bar(barDrawPos[0]-5, 2, COLOR_BLACK);  // erase left bar
+  draw_bar(barDrawPos[1]-5, screenHeight-2, COLOR_BLACK);  // erase right bar
+  for (char bar = 0; bar < 2; bar++) 
+    barDrawPos[bar] = barControlPos[bar];
+  draw_bar(barDrawPos[0]-5, 2, COLOR_WHITE); // draw left bar
+  draw_bar(barDrawPos[1]-5, screenHeight-2, COLOR_WHITE); // draw right bar
+}
+
+void position_update_bar()
+{
+  if (switches & SW1 && barControlPos[1] > barLim[0]) barControlPos[1] -= 3;
+  if (switches & SW2 && barControlPos[1] < barLim[1]) barControlPos[1] += 3;
+  if (switches & SW3 && barControlPos[0] > barLim[0]) barControlPos[0] -= 3;
+  if (switches & SW4 && barControlPos[0] < barLim[1]) barControlPos[0] += 3;
 }
 
 void draw_ball(int col, int row, unsigned short color)
@@ -22,64 +48,100 @@ void draw_ball(int col, int row, unsigned short color)
   fillRectangle(col-1, row-1, 3, 3, color);
 }
 
-short redrawScreen = 1;
+short ballDrawPos[2] = {1,10}, ballControlPos[2] = {2, 10};    // axis 0 for col, axis 1 for row
+short ballColVelocity = 1, ballColLim[2] = {1, screenWidth-3}; // -3 because of ball size
+short ballRowVelocity = 5, ballRowLim[2] = {1, screenHeight-3};// -3 because of ball size
 
 void screen_update_ball()
 {
   for (char axis = 0; axis < 2; axis++) 
-    if (drawPos[axis] != controlPos[axis]) /* position changed? */
+    if (ballDrawPos[axis] != ballControlPos[axis]) /* position changed? */
       goto redraw;
   return;			/* nothing to do */
  redraw:
-  draw_ball(drawPos[0], drawPos[1], COLOR_BLACK);  /* erase */
+  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_BLACK);  /* erase */
   for (char axis = 0; axis < 2; axis++) 
-    drawPos[axis] = controlPos[axis];
-  draw_ball(drawPos[0], drawPos[1], COLOR_WHITE); /* draw */
+    ballDrawPos[axis] = ballControlPos[axis];
+  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_WHITE); /* draw */
 }
 
-void update_shape()
-{
-  screen_update_ball();
-}
+short score[2] = {0,0};         // axis 0 for upper bar, axis 1 for lower bar
+short prev_score[2] = {-1,-1};
 
 void position_update_ball()
 {
-  {		/* move ball horizontally */
-    short oldRow = controlPos[1];
-    short newRow = oldRow + rowVelocity;
-    if (newRow <= rowLimits[0] || newRow >= rowLimits[1])
-	    rowVelocity = -rowVelocity;
-    else
-	    controlPos[1] = newRow;
-  }
   {   /* move ball vertically */
-    short oldCol = controlPos[0];
-    short newCol = oldCol + colVelocity;
-    if (newCol <= colLimits[0] || newCol >= colLimits[1])
-	    colVelocity = -colVelocity;
+    short oldCol = ballControlPos[0];
+    short newCol = oldCol + ballColVelocity;
+    if (newCol <= ballColLim[0] || newCol >= ballColLim[1])
+	    ballColVelocity = -ballColVelocity;
     else
-	    controlPos[0] = newCol;
+	    ballControlPos[0] = newCol;
+  }
+
+  {		/* move ball horizontally */
+    short oldRow = ballControlPos[1];
+    short newRow = oldRow + ballRowVelocity;
+    if (newRow <= ballRowLim[0]) {  // ball in upper row screen edge
+      if (ballControlPos[0]+2 < barControlPos[0]-5 || ballControlPos[0] > barControlPos[0]+8) {
+        score[1]++;
+      }
+      else
+	      ballRowVelocity = -ballRowVelocity;
+    }
+    else if (newRow >= ballRowLim[1]) {  // ball in lower row screen edge
+      if (ballControlPos[0]+2 < barControlPos[1]-5 || ballControlPos[0] > barControlPos[1]+8) {
+        score[0]++;
+      }
+      else
+        ballRowVelocity = -ballRowVelocity;
+    }
+    else
+	    ballControlPos[1] = newRow;
   }
 }
+
+short redrawScreen = 1;
 
 void wdt_c_handler()
 {
   static int secCount = 0;
-
   if (++secCount >= 20) {		/* 12.5/sec */
     position_update_ball();
-/*
-    {				// update hourglass
-      if (switches & SW3) green = (green + 1) % 64;
-      if (switches & SW2) blue = (blue + 2) % 32;
-      if (switches & SW1) red = (red - 3) % 32;
-      if (step++ > 30)
-        step = 0;
-    }
-    if (switches & SW4) return;
-*/
+    position_update_bar();
     redrawScreen = 1;
     secCount = 0;
   }
+}
+
+void draw_score()
+{
+  //
+}
+
+void screen_update_score()
+{
+  for (short i=0; i<2; i++)
+    if (prev_score[i] != score[i]) {
+      drawMiddleDashLine();
+      prev_score[i] = score[i];
+      draw_score();
+    }
+}
+/*
+  for (char axis = 0; axis < 2; axis++) 
+    if (ballDrawPos[axis] != ballControlPos[axis]) // position changed?
+      goto redraw;
+  return;			//nothing to do
+ redraw:
+  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_BLACK);  // erase
+  for (char axis = 0; axis < 2; axis++) 
+    ballDrawPos[axis] = ballControlPos[axis];
+*/
+void update_shape()
+{
+  screen_update_bar();
+  screen_update_ball();
+  screen_update_score();
 }
 
