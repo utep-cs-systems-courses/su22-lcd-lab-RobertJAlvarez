@@ -10,7 +10,6 @@ void configureClocks(){
   BCSCTL2 |= DIVS_3;      // SMCLK = DCO / 8
 }
 
-
 // enable watchdog timer periodic interrupt
 // period = SMCLOCK/32k
 void enableWDTInterrupts()  
@@ -21,7 +20,6 @@ void enableWDTInterrupts()
     1;			     // divide SMCLK by 8192
   IE1 |= WDTIE;		   // Enable watchdog interval timer interrupt
 }
-
 
 void timerAUpmode()
 {
@@ -34,5 +32,4 @@ void timerAUpmode()
   //  Mode Control 1: continuously 0...CCR0
   TACTL = TASSEL_2 + MC_1;   
 }
-
 

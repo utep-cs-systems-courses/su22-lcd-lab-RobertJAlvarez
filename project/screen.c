@@ -76,7 +76,7 @@ void position_update_ball()
     if (newCol <= ballColLim[0] || newCol >= ballColLim[1])
 	    ballColVelocity = -ballColVelocity;
     else
-	    ballControlPos[0] = newCol;
+      ballControlPos[0] = newCol;
   }
 
   {		/* move ball horizontally */
@@ -116,7 +116,7 @@ void wdt_c_handler()
 
 void draw_score()
 {
-  //
+  // do something
 }
 
 void screen_update_score()
@@ -126,18 +126,11 @@ void screen_update_score()
       drawMiddleDashLine();
       prev_score[i] = score[i];
       draw_score();
+      //restart game
+      break;
     }
 }
-/*
-  for (char axis = 0; axis < 2; axis++) 
-    if (ballDrawPos[axis] != ballControlPos[axis]) // position changed?
-      goto redraw;
-  return;			//nothing to do
- redraw:
-  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_BLACK);  // erase
-  for (char axis = 0; axis < 2; axis++) 
-    ballDrawPos[axis] = ballControlPos[axis];
-*/
+
 void update_shape()
 {
   screen_update_bar();
