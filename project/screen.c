@@ -48,21 +48,22 @@ void draw_ball(int col, int row, unsigned short color)
   fillRectangle(col-1, row-1, 3, 3, color);
 }
 
-short ballDrawPos[2] = {1,10}, ballControlPos[2] = {2, 10};    // axis 0 for col, axis 1 for row
+short ballDrawPos[2] = {screenWidth/2,screenHeight/2};         // Axis 0 for col, axis 1 for row
+short ballControlPos[2] = {1+screenWidth/2, 1+screenHeight};   // Axis 0 for col, axis 1 for row
 short ballColVelocity = 1, ballColLim[2] = {1, screenWidth-3}; // -3 because of ball size
 short ballRowVelocity = 5, ballRowLim[2] = {1, screenHeight-3};// -3 because of ball size
 
 void screen_update_ball()
 {
   for (char axis = 0; axis < 2; axis++) 
-    if (ballDrawPos[axis] != ballControlPos[axis]) /* position changed? */
+    if (ballDrawPos[axis] != ballControlPos[axis]) // position changed?
       goto redraw;
-  return;			/* nothing to do */
+  return;			// nothing to do
  redraw:
-  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_BLACK);  /* erase */
+  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_BLACK);  // erase
   for (char axis = 0; axis < 2; axis++) 
     ballDrawPos[axis] = ballControlPos[axis];
-  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_WHITE); /* draw */
+  draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_WHITE); // draw
 }
 
 short score[2] = {0,0};         // axis 0 for upper bar, axis 1 for lower bar
@@ -70,7 +71,7 @@ short prev_score[2] = {-1,-1};
 
 void position_update_ball()
 {
-  {   /* move ball vertically */
+  {   // move ball vertically
     short oldCol = ballControlPos[0];
     short newCol = oldCol + ballColVelocity;
     if (newCol <= ballColLim[0] || newCol >= ballColLim[1])
@@ -79,7 +80,7 @@ void position_update_ball()
       ballControlPos[0] = newCol;
   }
 
-  {		/* move ball horizontally */
+  {		// move ball horizontally
     short oldRow = ballControlPos[1];
     short newRow = oldRow + ballRowVelocity;
     if (newRow <= ballRowLim[0]) {  // ball in upper row screen edge
@@ -106,12 +107,25 @@ short redrawScreen = 1;
 void wdt_c_handler()
 {
   static int secCount = 0;
-  if (++secCount >= 20) {		/* 12.5/sec */
+  if (++secCount >= 20) {		// 12.5/sec
     position_update_ball();
     position_update_bar();
     redrawScreen = 1;
     secCount = 0;
   }
+}
+
+void restart_game()
+{
+  drawMiddleDashLine();
+
+  barControlPos[0] = 1+screenWidth/2; //Center upper bar
+  barControlPos[1] = 1+screenWidth/2; //Center lower bar
+
+  ballControlPos[0] = 1+screenWidth/2;  //Center ball horizontally
+  ballControlPos[1] = 1+screenHeight/2; //Center ball vertically
+
+  redrawScreen = 1;
 }
 
 void draw_score()
@@ -123,18 +137,17 @@ void screen_update_score()
 {
   for (short i=0; i<2; i++)
     if (prev_score[i] != score[i]) {
-      drawMiddleDashLine();
+      restart_game();
       prev_score[i] = score[i];
       draw_score();
-      //restart game
       break;
     }
 }
 
 void update_shape()
 {
+  screen_update_score();
   screen_update_bar();
   screen_update_ball();
-  screen_update_score();
 }
 
