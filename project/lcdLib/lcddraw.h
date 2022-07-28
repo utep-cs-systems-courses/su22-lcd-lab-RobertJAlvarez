@@ -47,6 +47,7 @@ void drawString5x7(u_char col, u_char row, char *string, u_int fgColorBGR, u_int
  *  Adapted from RobG's EduKit
  */
 void drawChar5x7(u_char col, u_char row, char c, u_int fgColorBGR, u_int bgColorBGR);
+void drawChar11x16(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR);
 
 /** Draw rectangle outline
  *  
@@ -56,7 +57,8 @@ void drawChar5x7(u_char col, u_char row, char c, u_int fgColorBGR, u_int bgColor
  *  \param height Height of rectangle
  *  \param colorBGR Color of rectangle in BGR
  */
-void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height, u_int colorBGR);
-
+void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
+		     u_int colorBGR);
 #endif // included
+
 

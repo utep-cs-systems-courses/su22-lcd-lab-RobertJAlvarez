@@ -66,8 +66,8 @@ void screen_update_ball()
   draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_WHITE); // draw
 }
 
-short score[2] = {0,0};         // axis 0 for upper bar, axis 1 for lower bar
-short prev_score[2] = {-1,-1};
+char score[2] = {'0','0'};
+char prev_score[2] = {'1','1'};
 
 void position_update_ball()
 {
@@ -130,12 +130,13 @@ void restart_game()
 
 void draw_score()
 {
-  // do something
+  drawChar11x16(10, screenHeight/4, score[0], COLOR_WHITE, COLOR_BLACK);
+  drawChar11x16(10, (3*screenHeight)/4, score[1], COLOR_WHITE, COLOR_BLACK);
 }
 
 void screen_update_score()
 {
-  for (short i=0; i<2; i++)
+  for (char i=0; i<2; i++)
     if (prev_score[i] != score[i]) {
       restart_game();
       prev_score[i] = score[i];
@@ -147,6 +148,10 @@ void screen_update_score()
 void update_shape()
 {
   screen_update_score();
+  if (score[0] > '5' || score[1] > '5') {
+    score[0] = '0';
+    score[1] = '0';
+  }
   screen_update_bar();
   screen_update_ball();
 }
