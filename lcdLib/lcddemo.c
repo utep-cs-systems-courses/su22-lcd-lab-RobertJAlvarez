@@ -15,7 +15,7 @@ int main()
 
   clearScreen(COLOR_BLUE);
 
-  drawString11x16(20,20, "hello", COLOR_GREEN, COLOR_RED);
+  drawString11x16(20,20, "012345", COLOR_GREEN, COLOR_RED);
 
-  //fillRectangle(40,40, 60, 60, COLOR_ORANGE);
+  fillRectangle(40,40, 60, 60, COLOR_ORANGE);
 }

@@ -74,7 +74,7 @@ void drawChar11x16(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgC
 {
   u_char col = 0;
   u_char row = 0;
-  u_char bit = 0x01;
+  short bit = 0x01;
   u_char oc = c - 0x20;
 
   lcd_setArea(rcol, rrow, rcol + 10, rrow + 16); // relative to requested col/row
