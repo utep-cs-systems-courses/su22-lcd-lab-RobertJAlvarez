@@ -5,7 +5,6 @@ LDFLAGS         = -L./lib -L/opt/ti/msp430_gcc/include/
 
 #switch the compiler (for the internal make rules)
 CC              = msp430-elf-gcc
-AS              = msp430-elf-gcc -mmcu=${CPU} -c
 
 all: proj.elf
 
@@ -20,11 +19,9 @@ proj.elf: ${COMMON_OBJECTS}
 load: proj.elf
 	msp430loader.sh $^
 
-c_libs:
+clean:
 	(cd timerLib && make clean)
 	(cd lcdLib && make clean)
-
-clean:
 	rm -rf lib h
 	rm -f *.o *.elf
 

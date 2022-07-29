@@ -71,29 +71,27 @@ char prev_score[2] = {'1','1'};
 
 void position_update_ball()
 {
-  {   // move ball vertically
+  {   // move ball horizontally
     short oldCol = ballControlPos[0];
     short newCol = oldCol + ballColVelocity;
     if (newCol <= ballColLim[0] || newCol >= ballColLim[1])
-	    ballColVelocity = -ballColVelocity;
+      ballColVelocity = -ballColVelocity;
     else
       ballControlPos[0] = newCol;
   }
 
-  {		// move ball horizontally
+  {		// move ball vertically
     short oldRow = ballControlPos[1];
     short newRow = oldRow + ballRowVelocity;
     if (newRow <= ballRowLim[0]) {  // ball in upper row screen edge
-      if (ballControlPos[0]+2 < barControlPos[0]-5 || ballControlPos[0] > barControlPos[0]+8) {
+      if (ballControlPos[0]+2 < barControlPos[0]-5 || ballControlPos[0] > barControlPos[0]+8)
         score[1]++;
-      }
       else
-	      ballRowVelocity = -ballRowVelocity;
+        ballRowVelocity = -ballRowVelocity;
     }
     else if (newRow >= ballRowLim[1]) {  // ball in lower row screen edge
-      if (ballControlPos[0]+2 < barControlPos[1]-5 || ballControlPos[0] > barControlPos[1]+8) {
+      if (ballControlPos[0]+2 < barControlPos[1]-5 || ballControlPos[0] > barControlPos[1]+8)
         score[0]++;
-      }
       else
         ballRowVelocity = -ballRowVelocity;
     }
