@@ -1,7 +1,12 @@
 all: libTimer.a
 
+CPU             = msp430g2553
+CFLAGS          = -mmcu=${CPU} -Os
+
 #switch the compiler (for the internal make rules)
-AR      = msp430-elf-ar
+CC              = msp430-elf-gcc
+AS              = msp430-elf-as
+AR              = msp430-elf-ar
 
 libTimer.a: clocksTimer.o sr.o
 	$(AR) crs $@ $^

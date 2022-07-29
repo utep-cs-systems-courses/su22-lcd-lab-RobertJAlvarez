@@ -14,6 +14,12 @@
  */
 void fillRectangle(u_char colMin, u_char rowMin, u_char width, u_char height, u_int colorBGR);
 
+/** Clear screen (fill with color)
+ *  
+ *  \param colorBGR The color to fill screen
+ */
+void clearScreen(u_int colorBGR);
+
 /** 5x7 font - this function draws background pixels
  *  Adapted from RobG's EduKit
  */

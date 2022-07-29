@@ -21,6 +21,17 @@ void fillRectangle(u_char colMin, u_char rowMin, u_char width, u_char height, u_
     lcd_writeColor(colorBGR);
 }
 
+/** Clear screen (fill with color)
+ *  
+ *  \param colorBGR The color to fill screen
+ */
+void clearScreen(u_int colorBGR) 
+{
+  u_char w = screenWidth;
+  u_char h = screenHeight;
+  fillRectangle(0, 0, screenWidth, screenHeight, colorBGR);
+}
+
 void drawChar11x16(u_char rcol, u_char rrow, char c, u_int fgColorBGR, u_int bgColorBGR) 
 {
   u_char col = 0;

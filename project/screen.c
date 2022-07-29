@@ -66,6 +66,16 @@ void screen_update_ball()
   draw_ball(ballDrawPos[0], ballDrawPos[1], COLOR_WHITE); // draw
 }
 
+void bounce_ball(char at_bar)
+{
+  /*
+  if (at_bar == 0)  // ball in upper row screen edge
+    if (ballControlPos[0]+2 < barControlPos[0])
+      //
+  */
+  ballRowVelocity  = -ballRowVelocity;
+}
+
 char score[2] = {'0','0'};
 char prev_score[2] = {'1','1'};
 
@@ -83,17 +93,17 @@ void position_update_ball()
   {		// move ball vertically
     short oldRow = ballControlPos[1];
     short newRow = oldRow + ballRowVelocity;
-    if (newRow <= ballRowLim[0]) {  // ball in upper row screen edge
+    if (newRow <= ballRowLim[0]) {      // ball in upper row screen edge
       if (ballControlPos[0]+2 < barControlPos[0]-5 || ballControlPos[0] > barControlPos[0]+8)
         score[1]++;
       else
-        ballRowVelocity = -ballRowVelocity;
+        bounce_ball(0);
     }
     else if (newRow >= ballRowLim[1]) {  // ball in lower row screen edge
       if (ballControlPos[0]+2 < barControlPos[1]-5 || ballControlPos[0] > barControlPos[1]+8)
         score[0]++;
       else
-        ballRowVelocity = -ballRowVelocity;
+        bounce_ball(1);
     }
     else
 	    ballControlPos[1] = newRow;

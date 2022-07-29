@@ -54,7 +54,7 @@ void lcd_writeColor(u_int colorBGR);
 #define rgb2bgr(val) ((((val) << 11)&0xf800) | ((val)&0x7e0) | (((val)>>11)&0x1f))
 
 /** Colors */
-#define COLOR_BLACK   0xffff
-#define COLOR_WHITE   0x0000
+#define COLOR_BLACK   0x0000
+#define COLOR_WHITE   0xffff
 
 #endif /* lcdutils_included */

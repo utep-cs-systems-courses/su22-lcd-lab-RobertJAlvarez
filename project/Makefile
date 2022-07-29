@@ -5,6 +5,7 @@ LDFLAGS         = -L./lib -L/opt/ti/msp430_gcc/include/
 
 #switch the compiler (for the internal make rules)
 CC              = msp430-elf-gcc
+AS              = msp430-elf-gcc -mmcu=${CPU} -c
 
 all: proj.elf
 
