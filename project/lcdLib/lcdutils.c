@@ -15,42 +15,42 @@ u_char _orientation = 0;
 
 /** LCD pin definitions*/
 /** SCLK & MOSI*/
-#define LCD_SPI_OUT		P1OUT
-#define LCD_SPI_DIR		P1DIR
-#define LCD_SPI_SEL		P1SEL
-#define LCD_SPI_SEL2	P1SEL2
-#define LCD_SCLK_PIN	BIT5
-#define LCD_MOSI_PIN	BIT7
+#define LCD_SPI_OUT   P1OUT
+#define LCD_SPI_DIR   P1DIR
+#define LCD_SPI_SEL   P1SEL
+#define LCD_SPI_SEL2  P1SEL2
+#define LCD_SCLK_PIN  BIT5
+#define LCD_MOSI_PIN  BIT7
 
 /** Chip select */
-#define LCD_CS_PIN	BIT0
-#define LCD_CS_DIR	P1DIR
-#define LCD_CS_OUT	P1OUT
+#define LCD_CS_PIN  BIT0
+#define LCD_CS_DIR  P1DIR
+#define LCD_CS_OUT  P1OUT
 
 /** CS convenience defines */
 #define LCD_SELECT() LCD_CS_OUT &= ~LCD_CS_PIN
 #define LCD_DESELECT()
 
 /** Data/command */
-#define LCD_DC_PIN	BIT4
-#define LCD_DC_DIR	P1DIR
-#define LCD_DC_OUT	P1OUT
+#define LCD_DC_PIN  BIT4
+#define LCD_DC_DIR  P1DIR
+#define LCD_DC_OUT  P1OUT
 
 /** D/C convenience defines */
 #define LCD_DC_LO() LCD_DC_OUT &= ~LCD_DC_PIN
 #define LCD_DC_HI() LCD_DC_OUT |= LCD_DC_PIN
 
 /** LCD driver IC specific defines */
-#define SWRESET	  0x01
-#define	SLEEPOUT  0x11
-#define DISPON		0x29
-#define CASETP		0x2A
-#define PASETP		0x2B
-#define RAMWRP		0x2C
-#define	MADCTL		0x36
-#define	COLMOD		0x3A
-#define GMCTRP1		0xE0
-#define GMCTRN1		0xE1
+#define SWRESET   0x01
+#define SLEEPOUT  0x11
+#define DISPON    0x29
+#define CASETP    0x2A
+#define PASETP    0x2B
+#define RAMWRP    0x2C
+#define MADCTL    0x36
+#define COLMOD    0x3A
+#define GMCTRP1   0xE0
+#define GMCTRN1   0xE1
 
 /** Set up onboard LCD's SPI and control pins */
 static void setUpSPIforLCD() {
@@ -81,9 +81,9 @@ static void setUpSPIforLCD() {
 /** Write data to LCD */
 static inline void lcd_writeData(u_char data) 
 {
-  while (UCB0STAT & UCBUSY);	/**< wait for previous transfer to complete */
-  LCD_DC_HI();			/**< specify sending data */
-  UCB0TXBUF = data;		/**< send data */
+  while (UCB0STAT & UCBUSY);  /**< wait for previous transfer to complete */
+  LCD_DC_HI();        /**< specify sending data */
+  UCB0TXBUF = data;   /**< send data */
 }
 
 typedef union {
@@ -101,16 +101,16 @@ void lcd_writeColor(u_int colorBGR)
 /** Write command to LCD (private) */
 void _writeCommand(u_char command) 
 {
-  while (UCB0STAT & UCBUSY);	/**< wait for previous transfer to complete */
-  LCD_DC_LO();			          /**< specify sending a command */
-  UCB0TXBUF = command;		    /**< send command */
+  while (UCB0STAT & UCBUSY);  /**< wait for previous transfer to complete */
+  LCD_DC_LO();                /**< specify sending a command */
+  UCB0TXBUF = command;        /**< send command */
 }
 
 /** Long delay (private) */
 void _delay(u_char x10ms) {
   while (x10ms > 0) {
-  	__delay_cycles(160000);
-  	x10ms--;
+    __delay_cycles(160000);
+    x10ms--;
   }
 }
 

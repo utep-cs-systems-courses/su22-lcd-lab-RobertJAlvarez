@@ -1,7 +1,7 @@
 # lcdLib from Project 3: LCD Game
 ## Introduction
 
-lcdLib provides primitives for a pixel, rectangle, clearing the screen and a 5x7 font. Handles all the lower-level "messy stuff". 
+lcdLib provides primitives for a pixel, rectangle, clearing the screen and a 11x16 font. Handles all the lower-level "messy stuff". 
 
 
 Two types are defined (used as shortcut to typing "unsigned [type]"):
@@ -21,17 +21,15 @@ Two types are defined (used as shortcut to typing "unsigned [type]"):
       of green, and 5 bits of red)
     - lcd_setArea, lcd_writeColor: methods for selecting rectangular
       regions and setting the colors of the pixels they contain.
-    
 
  - lcddraw.h: simple drawing facilities that utilize lcdutils
 
- - lcddraw.c: 
+ - lcddraw.c:
      - drawPixel(): sets the color of a pixel
      - fillRect(): fill a rectangle with a color
-     - drawChar5x7, drawString5x7: draws characters/strings at
-     particular locations
+     - drawChar5x7, drawString5x7: draws characters/strings at particular locations
 
- - font5x7.c, font11x16.c font8x12.c: tables of bitmapped fonts
+ - font11x16.c: table of bitmapped fonts
 
 ## Demo code
 
