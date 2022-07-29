@@ -68,11 +68,11 @@ void screen_update_ball()
 
 void bounce_ball(char at_bar)
 {
-  /*
-  if (at_bar == 0)  // ball in upper row screen edge
-    if (ballControlPos[0]+2 < barControlPos[0])
-      //
-  */
+  //If ball doesn't hit the center of the bar, make the ball move two pixels faster to that direction where the ball hit the bar
+  if (ballControlPos[0]+1 < barControlPos[at_bar] && ballColVelocity > -4)
+    ballColVelocity -= 2;
+  else if (ballControlPos[0]+1 > barControlPos[at_bar] && ballColVelocity < 4)
+    ballColVelocity += 2;
   ballRowVelocity  = -ballRowVelocity;
 }
 
@@ -106,7 +106,7 @@ void position_update_ball()
         bounce_ball(1);
     }
     else
-	    ballControlPos[1] = newRow;
+      ballControlPos[1] = newRow;
   }
 }
 
@@ -127,11 +127,9 @@ void restart_game()
 {
   drawMiddleDashLine();
 
-  barControlPos[0] = 1+screenWidth/2; //Center upper bar
-  barControlPos[1] = 1+screenWidth/2; //Center lower bar
-
-  ballControlPos[0] = 1+screenWidth/2;  //Center ball horizontally
-  ballControlPos[1] = 1+screenHeight/2; //Center ball vertically
+  barControlPos[0] = 1+screenWidth/2;   //Center upper bar
+  barControlPos[1] = 1+screenWidth/2;   //Center lower bar
+  ballControlPos[1] = 1+screenHeight/2; //Center ball vertically (row wise)
 
   redrawScreen = 1;
 }
