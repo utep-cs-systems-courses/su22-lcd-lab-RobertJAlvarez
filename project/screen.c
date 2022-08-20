@@ -51,7 +51,7 @@ void draw_ball(int col, int row, unsigned short color)
 short ballDrawPos[2] = {screenWidth/2,screenHeight/2};         // Axis 0 for col, axis 1 for row
 short ballControlPos[2] = {1+screenWidth/2, 1+screenHeight};   // Axis 0 for col, axis 1 for row
 short ballColVelocity = 1, ballColLim[2] = {1, screenWidth-3}; // -3 because of ball size
-short ballRowVelocity = 5, ballRowLim[2] = {1, screenHeight-3};// -3 because of ball size
+short ballRowVelocity = 4, ballRowLim[2] = {1, screenHeight-3};// -3 because of ball size
 
 void screen_update_ball()
 {
@@ -69,10 +69,10 @@ void screen_update_ball()
 void bounce_ball(char at_bar)
 {
   //If ball doesn't hit the center of the bar, make the ball move two pixels faster to that direction where the ball hit the bar
-  if (ballControlPos[0]+1 < barControlPos[at_bar] && ballColVelocity > -4)
-    ballColVelocity -= 2;
-  else if (ballControlPos[0]+1 > barControlPos[at_bar] && ballColVelocity < 4)
-    ballColVelocity += 2;
+  if (ballControlPos[0]+1 < barControlPos[at_bar] && ballColVelocity > -3)
+    ballColVelocity -= 1;
+  else if (ballControlPos[0]+1 > barControlPos[at_bar] && ballColVelocity < 3)
+    ballColVelocity += 1;
   ballRowVelocity  = -ballRowVelocity;
 }
 
